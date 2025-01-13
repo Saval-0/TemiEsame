@@ -26,8 +26,45 @@
 # print(string.punctuation)
 ## ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
 
+weathers = {}
+flights = {}
+avgPass = [ 0, 0 , 0 ]
+def main():
+    flightsFile = open('flights.txt', 'r')
+    for line in flightsFile:
+        flight = line.strip().split(";")
+        avgPass[1] += int(flight[2])
+        avgPass[0] += 1
+        flights[flight[0]] = [ flight[1], flight[2]]
 
-print(open('flights.txt', 'r').read())
-print()
-print(open('weather.txt', 'r').read())
-print()
+    flightsFile.close()
+
+    print(flights)
+
+    avgPass[2] = avgPass[1]/avgPass[0]
+    print("Numero medio di passeggeri: " + str(avgPass[2]))
+
+    weatherFile = open('weather.txt', 'r')
+    for line in weatherFile:
+        weather = line.strip().split(";")
+        weathers[weather[0]] = weather[1]
+
+    print("Codice dei voli verso città con condizione meteorologica Rainy o Stormy: ")
+    for key in flights:
+        for city in weathers:
+            if flights[key][0] == city and (weathers[city] == "Rainy" or weathers[city] == "Stormy"):
+                print("* " + key + " verso " + city + ": " + weathers[city])
+
+    print("Condizione meteorologica delle città che sono destinazione di almeno un volo: ")
+    for city in weathers:
+        cityPass = 0
+        for key in flights:
+            if flights[key][0] == city:
+                cityPass += int(flights[key][1])
+        if cityPass != 0:
+            print("* " + city + ": " + weathers[city] + ". " + str(cityPass) + " passeggeri in arrivo.")
+
+    
+    return
+
+main()
