@@ -26,6 +26,28 @@
 # print(string.punctuation)
 ## ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
 
+def main():
+    countries = {}
+    mostSight = ""
+    longestSight = ""
+    file = open('ufo_sightings.csv', 'r')
+    for line in file:
+        sight = line.strip().split(",")
+        currCount = sight[2]
+        sight.pop(2)
+        if currCount not in countries:
+            countries[currCount] = [ 0, sight ]
+        countries[currCount][0] += 1
 
-print(open('ufo_sightings.csv', 'r').read())
-print()
+        if mostSight == "" or countries[mostSight] <= countries[currCount]:
+            mostSight = currCount
+
+        if longestSight == "" or int(countries[longestSight][1][3]) <= int(sight[3]):
+            longestSight = currCount
+
+    print(countries[mostSight])
+    print(countries[longestSight])
+    print(countries)
+    return
+
+main()

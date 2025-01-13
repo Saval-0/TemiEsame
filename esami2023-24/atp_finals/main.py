@@ -26,6 +26,66 @@
 # print(string.punctuation)
 ## ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
 
+import random
 
-print(open('qualificati.txt', 'r').read())
-print()
+giornate = {}
+players = {}
+green = {}
+red = {}
+
+def genDay(pOne, pTwo):
+    
+    return
+
+def main():
+    file = open('qualificati.txt', 'r')
+    for line in file:
+        if line == "":
+            continue
+        
+        player = line.strip().split(",")
+        player = set([ int(player[0]), player[1] ])
+        players[player[0]] = player[1]
+        if player[0] == 1:
+            green[player[0]] = player[1]
+        if player[0] == 2:
+            red[player[0]] = player[1]
+    file.close()
+
+    i = 1
+    while i + 1 <= len(players) + 1:
+        if i not in green and i not in red:
+            choice = random.choice([i, i + 1])
+            green[choice] = players[choice]
+            if choice == i:
+                red[choice + 1] = players[choice + 1]
+            else:
+                red[choice - 1] = players[choice - 1]
+        i += 2
+
+    greenFile = open("green.txt", "w")
+    keys = list(green.keys())
+    for i, key in enumerate(keys):
+        greenFile.write(str(key) + " - " + str(green[key]) + "\n")
+        
+        giorante[i] = {
+
+        }
+        if i + 1 < len(keys):
+            next_key = keys[i + 1]
+            print(str(i) + " - " + str(key) + " - " + str(next_key))
+
+        
+    greenFile.close()
+
+    redFile = open("red.txt", "w")
+    for key in red:
+        redFile.write(str(key) + " - " + str(red[key]) + "\n")
+    redFile.close()
+
+    print(players)
+    print(green)
+    print(red)
+    return
+
+main()

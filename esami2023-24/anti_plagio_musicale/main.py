@@ -26,6 +26,72 @@
 # print(string.punctuation)
 ## ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
 
+songs = {}
 
-print(open('brani.txt', 'r').read())
-print()
+def find_consecutive_matches(notes1, notes2):
+    
+    n, m = len(notes1), len(notes2)
+    max_length = 0
+    
+    for i in range(n):
+        for j in range(m):
+            length = 0
+            while (i + length < n and j + length < m and 
+                    notes1[i + length] == notes2[j + length]):
+                length += 1
+            max_length = max(max_length, length)
+            
+    return max_length
+
+
+def find_transposed_sequences(notes1, notes2):
+    n, m = len(notes1), len(notes2)
+    min_sequence_length = 4
+    found_sequences = []
+    
+    notes1 = [int(x) for x in notes1]
+    notes2 = [int(x) for x in notes2]
+    
+    print(n - min_sequence_length + 1)
+    for i in range(n - min_sequence_length + 1):
+        for j in range(m - min_sequence_length + 1):
+            interval = notes2[j] - notes1[i]
+            
+            # Check how many consecutive notes follow this interval
+            length = 0
+            while (i + length < n and j + length < m and 
+                    notes2[j + length] - notes1[i + length] == interval):
+                length += 1
+            
+            if length >= min_sequence_length:
+                found_sequences.append({
+                    'length': length,
+                    'interval': interval,
+                    'pos1': i,
+                    'pos2': j
+                })
+    
+    return found_sequences
+
+def main():
+    file = open('brani.txt', 'r')
+
+    for line in file:
+        currSong = [ line.split(":")[0].strip(), line.split(":")[1].strip().split(" ") ]
+        title = currSong[0]
+        notes = currSong[1]
+                
+        for prev_title, prev_notes in songs.items():
+            if notes == prev_notes:
+                print(f"\'{title}\' è un PLAGIO di \'{prev_title}\'")
+            else:
+                max_consecutive = find_consecutive_matches(notes, prev_notes)
+                if max_consecutive >= 4:
+                    print(f"'{title}' contiene {max_consecutive}, è una COPIATURA di '{prev_title}'")
+        
+        songs[title] = notes
+
+    return
+
+
+main()

@@ -26,6 +26,30 @@
 # print(string.punctuation)
 ## ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
 
+import csv
+from datetime import date
 
-print(open('hashtags.csv', 'r').read())
-print()
+def main():
+    dayOne = {}
+    dayTwo = {}
+    file = open("hashtags.csv", "r", encoding="utf-8")
+    posts = []
+
+    nextDay = false
+    for line in file:
+        post = line.rstrip().split(" ")
+        post = [ post[0], post[1], post[2:] ]
+
+        date = date.fromisoformat(post[0])
+        if 
+        for hash in post[2]:
+            if hash not in hashs:
+                hashs[hash] = 1
+            elif hash in hashs:
+                hashs[hash] += 1
+        print(post)
+    
+    print(hashs)
+
+
+main()
