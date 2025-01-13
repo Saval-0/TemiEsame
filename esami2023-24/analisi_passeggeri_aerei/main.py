@@ -26,6 +26,56 @@
 # print(string.punctuation)
 ## ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
 
+def insertAge(avgAge, passenger):
+    age = passenger[1].rstrip()
+    country = passenger[3].rstrip()
+    if country not in avgAge:
+        avgAge[country] = [ 0, 0 ]
 
-print(open('passeggeri.txt', 'r').read())
-print()
+    avgAge[country][0] += int(age)
+    avgAge[country][1] += 1
+    return
+
+
+def insertFlight(flights, passenger, mostPop):
+    flight_num = passenger[5].rstrip()
+    gender = passenger[2].rstrip()
+    if flight_num not in flights:
+        flights[flight_num] = [ {"M": 0, "F": 0}, 0 ]
+    currFlight = [ flight_num, flights[flight_num] ]
+    
+    currFlight[1][0][gender] += 1
+    currFlight[1][1] += 1
+
+    if len(mostPop) == 0 or mostPop[1][1] < currFlight[1][1]:
+        mostPop = currFlight
+    return mostPop
+
+
+def main():
+    file = open("passeggeri.txt", "r", encoding="utf-8")
+
+    skip = True
+    avgAge = {}
+    flights = {}
+    mostPop = []
+    for line in file:
+        if skip:
+            skip = False
+            continue
+
+        passenger = line.split(",")
+
+        insertAge(avgAge, passenger)
+        mostPop = insertFlight(flights, passenger, mostPop)
+
+    for country in avgAge:
+        avg = avgAge[country][0]/avgAge[country][1]
+        print("Avg Age in " + country + " is " + str(round(avg, 1)))
+
+    print("Numero di volo più popolare: " + mostPop[0] + ", Passeggeri M: " + str(mostPop[1][0]["M"]) + "/ F: " + str(mostPop[1][0]["F"]))
+
+    return
+
+
+main()
