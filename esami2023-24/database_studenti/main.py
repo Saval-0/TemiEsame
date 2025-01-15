@@ -26,8 +26,57 @@
 # print(string.punctuation)
 ## ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
 
+def main():
+    studenti = {}
+    fileStudenti = open('studenti.csv', 'r')
+    for i, line in enumerate(fileStudenti):
+        if i == 0:
+            continue
+        
+        record = line.rstrip().rsplit(",")
+        idStd = record[0]
+        if idStd not in studenti:
+            studenti[idStd] = []
+        
+        for i, field in enumerate(record):
+            if i == 0:
+                continue
+            studenti[idStd].append(field)
+    fileStudenti.close()
 
-print(open('studenti.csv', 'r').read())
-print()
-print(open('criteria.txt', 'r').read())
-print()
+    criteria = []
+    critStuds = []
+    criteriaFile = open('criteria.txt', 'r')
+    for i, line in enumerate(criteriaFile):
+        if i == 0:
+            criteria.append(line.strip().split(","))
+        else:
+            criteria.append(line.strip())
+    
+    for i, crt in enumerate(criteria):
+        if i == 0:
+            print("Studenti trovati per ID:")
+            for stud in studenti:
+                if stud in crt:
+                    print(" * " + str(studenti[stud]))
+        elif i == 1:
+            print("Studenti trovati per cognome:")
+            for studs in studenti:
+                if studenti[stud][0] == crt:
+                    print(" * " + str(studenti[stud]))
+        elif i == 2:
+            for stud in studenti:
+                if studenti[stud][1] == crt:
+                    critStuds.append(stud)
+
+    count = 0
+    avg = 0
+    for stud in critStuds:
+        count += 1
+        avg += float(studenti[stud][2])
+    
+    print("Media del GPA per il grado 10A: " + str(avg / count))
+
+    return
+
+main()
